@@ -1,0 +1,12 @@
+mysql:
+  username: "Your mysql username"
+  password: "Your mysql password"
+  host: "Your mysql host"
+  port: "3306"
+  database: "Your mysql database"
+redis:
+  username: "Your mysql username"
+  password: "Your mysql password"
+  host: "Your mysql host"
+  port: "3306"
+  database: "Your mysql database"
