@@ -17,7 +17,7 @@ type User struct {
 	Avatar    string         `json:"avatar" gorm:"column:avatar"`
 	CreatedAt time.Time      `json:"created_at" gorm:"column:created_at"`
 	UpdatedAt time.Time      `json:"updated_at" gorm:"column:updated_at"`
-	DeletedAt gorm.DeletedAt `json:"deleted_at" gorm:"column:updated_at;index"`
+	DeletedAt gorm.DeletedAt `json:"deleted_at" gorm:"column:deleted_at;index"`
 }
 
 func (User) TableName() string {
@@ -55,5 +55,5 @@ func (d *UserDao) RetrieveInstance(username string) (*User, error) {
 	return u, err
 }
 func (d *UserDao) UpdateInstanceOfPassword(username, password string) error {
-	return d.db.WithContext(d.ctx).Where("username = ?", username).Update("password", password).Error
+	return d.db.WithContext(d.ctx).Model(&User{}).Where("username = ?", username).Update("password", password).Error
 }
