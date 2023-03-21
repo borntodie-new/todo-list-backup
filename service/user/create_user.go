@@ -45,7 +45,7 @@ func (f *CreateUserFlow) Do() error {
 	if err := f.checkParam(); err != nil {
 		return err
 	}
-	if err := f.create(); err != nil {
+	if err := f.prepareData(); err != nil {
 		return err
 	}
 	return nil
@@ -61,7 +61,7 @@ func (f *CreateUserFlow) checkParam() error {
 	f.Password = utils.Default().GenPassword(f.Password)
 	return nil
 }
-func (f *CreateUserFlow) create() error {
+func (f *CreateUserFlow) prepareData() error {
 	user := &model.User{
 		Username: f.Username,
 		Password: f.Password,
