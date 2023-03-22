@@ -20,7 +20,8 @@ func (h *Handler) ChangePassword(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, resp.RespFailed(constant.ParamErr))
 		return
 	}
-	err := service.UpdateUser(req.OldPassword, req.NewPassword, ctx, h.db)
+	username := ctx.MustGet("username").(string)
+	err := service.UpdateUser(username, req.NewPassword, ctx, h.db)
 	if err != nil {
 		ctx.JSON(http.StatusOK, resp.RespFailed(err))
 		return
