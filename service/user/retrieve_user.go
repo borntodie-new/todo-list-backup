@@ -2,10 +2,11 @@ package user
 
 import (
 	"context"
+	"gorm.io/gorm"
+
 	"github.com/borntodie-new/todo-list-backup/constant"
 	"github.com/borntodie-new/todo-list-backup/model"
 	"github.com/borntodie-new/todo-list-backup/utils"
-	"gorm.io/gorm"
 )
 
 type RetrieveUserFlow struct {
@@ -45,7 +46,7 @@ func (f *RetrieveUserFlow) Do() (*model.User, error) {
 }
 
 func (f *RetrieveUserFlow) checkParam() error {
-	if f.Username == "" || f.Password == "" {
+	if f.Username == "" || f.Password == ""{
 		return constant.ParamErr
 	}
 	return nil
@@ -54,7 +55,7 @@ func (f *RetrieveUserFlow) checkParam() error {
 func (f *RetrieveUserFlow) prepareData() error {
 	instance, err := model.NewUserDao(f.ctx, f.db).RetrieveInstance(f.Username)
 	if err != nil {
-		return err
+		return constant.ServiceErr
 	}
 	verify := utils.Default().Verify(f.Password, instance.Password)
 	if !verify {

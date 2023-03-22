@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-
 	"gorm.io/gorm"
 
 	"github.com/borntodie-new/todo-list-backup/constant"
@@ -26,11 +25,11 @@ type CreateUserFlow struct {
 	// response data
 }
 
-func CreateUser(username, password, email, avatar string ,ctx context.Context, db *gorm.DB) error  {
-	return  NewCreateUserFlow(username, password, email, avatar, ctx, db).Do()
+func CreateUser(username, password, email, avatar string, ctx context.Context, db *gorm.DB) error {
+	return NewCreateUserFlow(username, password, email, avatar, ctx, db).Do()
 }
 
-func NewCreateUserFlow(username, password, email, avatar string ,ctx context.Context, db *gorm.DB) *CreateUserFlow {
+func NewCreateUserFlow(username, password, email, avatar string, ctx context.Context, db *gorm.DB) *CreateUserFlow {
 	return &CreateUserFlow{
 		ctx:      ctx,
 		db:       db,
