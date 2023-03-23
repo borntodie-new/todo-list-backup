@@ -1,13 +1,14 @@
 package utils
 
 import (
+	"github.com/borntodie-new/todo-list-backup/config"
 	"github.com/borntodie-new/todo-list-backup/constant"
 	"github.com/golang-jwt/jwt/v4"
 	"time"
 )
 
 type Claims struct {
-	ID       int    `json:"id"`
+	ID       int64    `json:"id"`
 	Username string `json:"username"`
 	jwt.RegisteredClaims
 }
@@ -16,9 +17,9 @@ type CustomJWT struct {
 	SigningKey []byte
 }
 
-func NewCustomJWT(privateKey []byte) *CustomJWT {
+func NewCustomJWT(signingKey []byte) *CustomJWT {
 	return &CustomJWT{
-		SigningKey: privateKey,
+		SigningKey: signingKey,
 	}
 }
 
@@ -51,7 +52,7 @@ func (j *CustomJWT) RefreshToken(tokenString string) (string, error) {
 		return "", err
 	}
 	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
-		claims.ExpiresAt = jwt.NewNumericDate(time.Now().Add(constant.TokenExpires * time.Hour)) // refresh token expire time is 24 hour
+		claims.ExpiresAt = jwt.NewNumericDate(time.Now().Add(time.Duration(config.GetConfig().RefreshTime) * time.Hour)) // refresh token expire time is 24 hour
 		jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 		return token.SignedString(j.SigningKey)
 	}
