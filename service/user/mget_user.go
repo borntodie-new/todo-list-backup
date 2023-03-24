@@ -28,7 +28,7 @@ type DetailTodo struct {
 
 type DetailUserAndTodo struct {
 	*DetailUser
-	Todos []*model.Todo `json:"todos"`
+	Todos []*model.Todo `json:"todos,omitempty"` // 空的列表返回null
 }
 
 type MGetUserFlow struct {
@@ -53,11 +53,12 @@ func MGetUser(userIds []int64, ctx context.Context, db *gorm.DB) ([]*DetailUserA
 
 func NewMGetUserFlow(userIds []int64, ctx context.Context, db *gorm.DB) *MGetUserFlow {
 	return &MGetUserFlow{
-		ctx:      ctx,
-		db:       db,
-		UserIds:  userIds,
-		usersMap: make(map[int64]*model.User),
-		todosMap: make(map[int64][]*model.Todo),
+		ctx:         ctx,
+		db:          db,
+		UserIds:     userIds,
+		usersMap:    make(map[int64]*model.User),
+		todosMap:    make(map[int64][]*model.Todo),
+		UserAndTodo: make([]*DetailUserAndTodo, 0),
 	}
 }
 
@@ -114,7 +115,6 @@ func (f *MGetUserFlow) prepareData() error {
 }
 
 func (f *MGetUserFlow) packageData() error {
-	detailUserAndTodo := make([]*DetailUserAndTodo, 0)
 	for _, user := range f.usersMap {
 		temp := &DetailUserAndTodo{
 			DetailUser: &DetailUser{
@@ -128,8 +128,7 @@ func (f *MGetUserFlow) packageData() error {
 			Todos: make([]*model.Todo, 0),
 		}
 		temp.Todos = f.todosMap[user.ID]
-		detailUserAndTodo = append(detailUserAndTodo, temp)
+		f.UserAndTodo = append(f.UserAndTodo, temp)
 	}
-	f.UserAndTodo = detailUserAndTodo
 	return nil
 }
