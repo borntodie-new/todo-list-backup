@@ -8,6 +8,11 @@ import (
 	"github.com/spf13/viper"
 )
 
+type Server struct {
+	Host string `mapstructure:"host"`
+	Port string `mapstructure:"port"`
+}
+
 type Mysql struct {
 	Username string `mapstructure:"username"`
 	Password string `mapstructure:"password"`
@@ -24,9 +29,26 @@ type Redis struct {
 	Database int    `mapstructure:"database"`
 }
 
+type JWTConfig struct {
+	SigningKey  string `mapstructure:"signing_key"`
+	ExpireTime  int    `mapstructure:"expire_time"`
+	RefreshTime int    `mapstructure:"refresh_time"`
+}
+
+type EmailConfig struct {
+	Host     string `mapstructure:"host"`
+	Port     int    `mapstructure:"port"`
+	Username string `mapstructure:"username"`
+	Password string `mapstructure:"password"`
+	From     string `mapstructure:"from"`
+}
+
 type Config struct {
-	*Mysql `mapstructure:"mysql"`
-	*Redis `mapstructure:"redis"`
+	*Server    `mapstructure:"server"`
+	*Mysql     `mapstructure:"mysql"`
+	*Redis     `mapstructure:"redis"`
+	*JWTConfig `mapstructure:"jwt"`
+	*EmailConfig `mapstructure:"email"`
 }
 
 var (
