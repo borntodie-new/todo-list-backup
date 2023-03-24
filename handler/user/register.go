@@ -14,7 +14,7 @@ import (
 type RegisterRequest struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
-	Email    string `json:"email" binding:"required"`
+	Email    string `json:"email" binding:"required,email"`
 	Code     string `json:"code" binding:"required"`
 	Avatar   string `json:"avatar" binding:"required"`
 }
@@ -26,7 +26,7 @@ func (h *Handler) Register(ctx *gin.Context) {
 		return
 	}
 	// handler code here
-	key := fmt.Sprintf(constant.CodePrefix, req.Username)
+	key := fmt.Sprintf(constant.CodePrefix, req.Email)
 	cacheCode, err := h.rd.Get(ctx, key).Result()
 	if err == redis.Nil {
 		ctx.JSON(http.StatusOK, resp.RespFailed(constant.CodeExpiresErr))
