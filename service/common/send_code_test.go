@@ -27,7 +27,7 @@ func init() {
 
 func TestSendCode(t *testing.T) {
 	ctx := context.Background()
-	email := "123456@qq.com"
+	email := "jasonborntodie@gmail.com"
 	err := SendCode(email, ctx, rd)
 	assert.Nil(t, err)
 	result, err := rd.Get(ctx, "todo-list-backup-code-123456@qq.com").Result()
