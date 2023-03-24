@@ -11,7 +11,7 @@ import (
 type ChangeRequest struct {
 	OldPassword string `json:"old_password" binding:"required"`
 	NewPassword string `json:"new_password" binding:"required"`
-	RepPassword string `json:"rep_password" binding:"required;eqfield=NewPassword"`
+	RepPassword string `json:"rep_password" binding:"required,eqfield=NewPassword"`
 }
 
 func (h *Handler) ChangePassword(ctx *gin.Context) {
