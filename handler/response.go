@@ -7,7 +7,7 @@ import (
 type BaseResp struct {
 	StatusCode int         `json:"status_code"`
 	Message    string      `json:"message"`
-	Data       interface{} `json:"data;omitempty"`
+	Data       interface{} `json:"data,omitempty"`
 }
 
 func RespSuccess() *BaseResp {
@@ -57,6 +57,10 @@ func errorConvertToCodeAndMsg(err error) (int, string) {
 		return constant.UserAlreadyExistErrCode, msg
 	case constant.AuthorizationFailedErr:
 		return constant.AuthorizationFailedErrCode, msg
+	case constant.TokenExpiredErr:
+		return constant.TokenExpiredErrCode, msg
+	case constant.TokenInvalidErr:
+		return constant.TokenInvalidErrCode, msg
 	default:
 		return constant.ServiceErrCode, msg
 	}
