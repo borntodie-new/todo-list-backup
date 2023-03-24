@@ -34,7 +34,7 @@ func (e *EmailCodeService) SendCode() error {
 		Username string
 		Code     string
 	}{
-		Username: e.Subject,
+		Username: e.To,
 		Code:     e.Code,
 	}
 
