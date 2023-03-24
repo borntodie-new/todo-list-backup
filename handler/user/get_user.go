@@ -8,17 +8,9 @@ import (
 	"net/http"
 )
 
-type GetUserRequest struct {
-	Id int64 `json:"id" binding:"required"`
-}
-
 func (h *Handler) GetUser(ctx *gin.Context) {
-	req := new(GetUserRequest)
-	if err := ctx.ShouldBindJSON(req); err != nil {
-		ctx.JSON(http.StatusOK, resp.RespFailed(constant.ParamErr))
-		return
-	}
-	user, err := service.MGetUser([]int64{req.Id}, ctx, h.db)
+	userId := ctx.MustGet(constant.IDOfContextKey).(int64)
+	user, err := service.MGetUser([]int64{userId}, ctx, h.db)
 	if err != nil {
 		ctx.JSON(http.StatusOK, resp.RespFailed(err))
 		return
