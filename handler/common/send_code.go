@@ -9,7 +9,7 @@ import (
 )
 
 type SendCodeRequest struct {
-	Email string `json:"email" binding:"required;email"`
+	Email string `json:"email" binding:"email,required"`
 }
 
 func (h Handler) SendCode(ctx *gin.Context) {
