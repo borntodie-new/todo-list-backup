@@ -11,6 +11,8 @@ var (
 	UserPasswordErr        = errors.New("User password wrong")
 	UserAlreadyExistErr    = errors.New("User already exists")
 	AuthorizationFailedErr = errors.New("Authorization failed")
+	TokenExpiredErr        = errors.New("Token is expired")
+	TokenInvalidErr        = errors.New("Token is invalid")
 )
 
 var (
@@ -22,4 +24,6 @@ var (
 	UserPasswordErrCode        = 10005
 	UserAlreadyExistErrCode    = 10006
 	AuthorizationFailedErrCode = 10007
+	TokenExpiredErrCode        = 10008
+	TokenInvalidErrCode        = 10009
 )
