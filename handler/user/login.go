@@ -1,12 +1,13 @@
 package user
 
 import (
-	"fmt"
+	"github.com/borntodie-new/todo-list-backup/config"
 	"github.com/borntodie-new/todo-list-backup/constant"
+	"github.com/borntodie-new/todo-list-backup/utils"
 	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis/v8"
+	"github.com/golang-jwt/jwt/v4"
 	"net/http"
-	"strings"
+	"time"
 
 	resp "github.com/borntodie-new/todo-list-backup/handler"
 	service "github.com/borntodie-new/todo-list-backup/service/user"
@@ -15,7 +16,6 @@ import (
 type LoginRequest struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
-	Code     string `json:"code" binding:"required"`
 }
 
 func (h *Handler) Login(ctx *gin.Context) {
@@ -25,26 +25,31 @@ func (h *Handler) Login(ctx *gin.Context) {
 		return
 	}
 	// handler code here
-	key := fmt.Sprintf(constant.CodePrefix, req.Username)
-	cacheCode, err := h.rd.Get(ctx, key).Result()
-	if err == redis.Nil {
-		ctx.JSON(http.StatusOK, resp.RespFailed(constant.CodeExpiresErr))
-		return
-	}
-	if err != nil {
-		ctx.JSON(http.StatusOK, resp.RespFailed(constant.CodeIncorrectErr))
-		return
-	}
-	if strings.ToLower(cacheCode) != strings.ToLower(req.Code) {
-		ctx.JSON(http.StatusOK, resp.RespFailed(constant.CodeIncorrectErr))
-		return
-	}
 	user, err := service.RetrieveUser(req.Username, req.Password, ctx, h.db)
 	if err != nil {
 		ctx.JSON(http.StatusOK, resp.RespFailed(err))
 		return
 	}
-	// TODO signed token here
-
-	ctx.JSON(http.StatusOK, resp.RespSuccessWithData(user))
+	// signed token here
+	conf := config.GetConfig()
+	customJWT := utils.NewCustomJWT([]byte(config.GetConfig().JWTConfig.SigningKey))
+	claims := &utils.Claims{
+		ID:       user.ID,
+		Username: user.Username,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().
+				Add(time.Duration(conf.JWTConfig.ExpireTime) * time.Hour)), // 签名生效时间
+			NotBefore: jwt.NewNumericDate(time.Now()), // 签名生效时间
+			IssuedAt:  jwt.NewNumericDate(time.Now()), // 签名生效时间
+		},
+	}
+	token, err := customJWT.GenerateToken(claims)
+	if err != nil {
+		ctx.JSON(http.StatusOK, resp.RespFailed(err))
+		return
+	}
+	ctx.JSON(http.StatusOK, resp.RespSuccessWithData(gin.H{
+		"user_id": user.ID,
+		"token":   token,
+	}))
 }
