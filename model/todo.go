@@ -46,16 +46,16 @@ func (d *TodoDao) CreateInstance(todo *Todo) error {
 func (d *TodoDao) DeleteInstance(userId, id int64) error {
 	return d.db.WithContext(d.ctx).Model(&Todo{}).Where("id = ? and user_id = ?", id, userId).Update("completed", true).Error
 }
-func (d *TodoDao) RetrieveInstances(userIds []int64, offset, limit int) ([]*Todo, error) {
+func (d *TodoDao) RetrieveInstances(userIds []int64) ([]*Todo, error) {
 	ts := make([]*Todo, 0)
-	err := d.db.WithContext(d.ctx).Where("user_id IN ?", userIds).Limit(limit).Offset(offset).Order("created_at DESC").Find(&ts).Error
+	err := d.db.WithContext(d.ctx).Where("user_id IN ?", userIds).Order("created_at DESC").Find(&ts).Error
 	return ts, err
 }
 func (d *TodoDao) UpdateInstance(userId, id int64, content string) error {
 	return d.db.WithContext(d.ctx).Model(&Todo{}).Where("id = ? and user_id = ?", id, userId).Update("context", content).Error
 }
-func (d *TodoDao) RetrieveInstance(userId, id int64) (*Todo, error) {
+func (d *TodoDao) RetrieveInstance(userId, id int64, offset, limit int) (*Todo, error) {
 	t := &Todo{}
-	err := d.db.WithContext(d.ctx).Where("user_id = ? and id = ?", userId, id).Find(t).Error
+	err := d.db.WithContext(d.ctx).Where("user_id = ? and id = ?", userId, id).Limit(limit).Offset(offset).Find(t).Error
 	return t, err
 }
