@@ -54,8 +54,8 @@ func (d *TodoDao) RetrieveInstances(userIds []int64) ([]*Todo, error) {
 func (d *TodoDao) UpdateInstance(userId, id int64, content string) error {
 	return d.db.WithContext(d.ctx).Model(&Todo{}).Where("id = ? and user_id = ?", id, userId).Update("context", content).Error
 }
-func (d *TodoDao) RetrieveInstance(userId, id int64, offset, limit int) (*Todo, error) {
+func (d *TodoDao) RetrieveInstance(userId, id int64) (*Todo, error) {
 	t := &Todo{}
-	err := d.db.WithContext(d.ctx).Where("user_id = ? and id = ?", userId, id).Limit(limit).Offset(offset).Find(t).Error
+	err := d.db.WithContext(d.ctx).Where("user_id = ? and id = ?", userId, id).Find(t).Error
 	return t, err
 }
