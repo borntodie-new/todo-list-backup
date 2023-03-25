@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/borntodie-new/todo-list-backup/handler/common"
+	"github.com/borntodie-new/todo-list-backup/handler/todo"
 	"github.com/borntodie-new/todo-list-backup/handler/user"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
@@ -17,5 +18,8 @@ func InitRouter(db *gorm.DB, rd *redis.Client) *gin.Engine {
 	// register common modula router
 	commonHandler := common.NewHandlerService(rd)
 	registerCommonRouter(api, commonHandler)
+	// register todo module router
+	todoHandler := todo.NewHandlerService(db)
+	registerTodoRouter(api, todoHandler)
 	return r
 }
