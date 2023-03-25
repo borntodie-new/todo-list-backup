@@ -9,17 +9,17 @@ import (
 )
 
 type AddTodoRequest struct {
-	UserId  int64  `json:"user_id" binding:"required"`
 	Content string `json:"content" binding:"required"`
 }
 
 func (h *Handler) AddTodo(ctx *gin.Context) {
+	userId := ctx.MustGet(constant.IDOfContextKey).(int64)
 	req := new(AddTodoRequest)
 	if err := ctx.ShouldBindJSON(req); err != nil {
 		ctx.JSON(http.StatusOK, resp.RespFailed(constant.ParamErr))
 		return
 	}
-	err := service.CreateTodo(req.UserId, req.Content, ctx, h.db)
+	err := service.CreateTodo(userId, req.Content, ctx, h.db)
 	if err != nil {
 		ctx.JSON(http.StatusOK, resp.RespFailed(err))
 		return
