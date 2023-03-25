@@ -1,12 +1,25 @@
+server:
+  host: "127.0.0.1"
+  port: "8080"
 mysql:
-  username: "Your mysql username"
-  password: "Your mysql password"
-  host: "Your mysql host"
+  username: "admin"
+  password: "admin"
+  host: "127.0.0.1"
   port: "3306"
-  database: "Your mysql database"
+  database: "todo"
 redis:
-  username: "Your mysql username"
-  password: "Your mysql password"
-  host: "Your mysql host"
-  port: "3306"
-  database: "Your mysql database"
+  username: ""
+  password: "admin"
+  host: "127.0.0.1"
+  port: "6379"
+  database: 0
+jwt:
+  signing_key: "123123123"
+  expire_time: 24
+  refresh_time: 12
+email:
+  host: "那家邮箱服务的地址"
+  port: 465 # 这是QQ邮箱的SMTP端口
+  username: "发送人的邮箱"
+  password: "邮箱的key"
+  from: "发送人的邮箱"

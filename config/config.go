@@ -44,10 +44,10 @@ type EmailConfig struct {
 }
 
 type Config struct {
-	*Server    `mapstructure:"server"`
-	*Mysql     `mapstructure:"mysql"`
-	*Redis     `mapstructure:"redis"`
-	*JWTConfig `mapstructure:"jwt"`
+	*Server      `mapstructure:"server"`
+	*Mysql       `mapstructure:"mysql"`
+	*Redis       `mapstructure:"redis"`
+	*JWTConfig   `mapstructure:"jwt"`
 	*EmailConfig `mapstructure:"email"`
 }
 
