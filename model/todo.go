@@ -52,7 +52,7 @@ func (d *TodoDao) RetrieveInstances(userIds []int64) ([]*Todo, error) {
 	return ts, err
 }
 func (d *TodoDao) UpdateInstance(userId, id int64, content string) error {
-	return d.db.WithContext(d.ctx).Model(&Todo{}).Where("id = ? and user_id = ?", id, userId).Update("context", content).Error
+	return d.db.WithContext(d.ctx).Model(&Todo{}).Where("id = ? and user_id = ?", id, userId).Update("content", content).Error
 }
 func (d *TodoDao) RetrieveInstance(userId, id int64) (*Todo, error) {
 	t := &Todo{}
