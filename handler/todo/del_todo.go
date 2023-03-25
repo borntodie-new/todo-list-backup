@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-func (h *HandlerService) DelTodo(ctx *gin.Context) {
+func (h *Handler) DelTodo(ctx *gin.Context) {
 	// get userId from ctx
 	userId := ctx.MustGet(constant.IDOfContextKey).(int64)
 	// get todoId from url's params

@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func (h *HandlerService) MGetTodo(ctx *gin.Context) {
+func (h *Handler) MGetTodo(ctx *gin.Context) {
 	// get userId from ctx
 	userId := ctx.MustGet(constant.IDOfContextKey).(int64)
 	todo, err := service.MGetTodo([]int64{userId}, ctx, h.db)

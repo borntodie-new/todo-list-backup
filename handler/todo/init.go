@@ -7,11 +7,11 @@ import (
 )
 
 var (
-	handler Handler
+	handler HandlerService
 	handlerOnce sync.Once
 )
 
-type Handler interface {
+type HandlerService interface {
 	AddTodo(ctx *gin.Context)
 	GetTodo(ctx *gin.Context)
 	MGetTodo(ctx *gin.Context)
@@ -19,17 +19,17 @@ type Handler interface {
 	UpdTodo(ctx *gin.Context)
 }
 
-type HandlerService struct {
+type Handler struct {
 	db *gorm.DB
 }
 
-func NewHandler(db *gorm.DB) Handler {
+func NewHandlerService(db *gorm.DB) HandlerService {
 	handlerOnce.Do(func() {
-		handler = &HandlerService{
+		handler = &Handler{
 			db: db,
 		}
 	})
 	return handler
 }
 
-var _ Handler = (*HandlerService)(nil)
+var _ HandlerService = (*Handler)(nil)

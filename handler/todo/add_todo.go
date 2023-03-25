@@ -13,7 +13,7 @@ type AddTodoRequest struct {
 	Content string `json:"content" binding:"required"`
 }
 
-func (h *HandlerService) AddTodo(ctx *gin.Context) {
+func (h *Handler) AddTodo(ctx *gin.Context) {
 	req := new(AddTodoRequest)
 	if err := ctx.ShouldBindJSON(req); err != nil {
 		ctx.JSON(http.StatusOK, resp.RespFailed(constant.ParamErr))

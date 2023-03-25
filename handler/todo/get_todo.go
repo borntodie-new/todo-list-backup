@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-func (h *HandlerService) GetTodo(ctx *gin.Context) {
+func (h *Handler) GetTodo(ctx *gin.Context) {
 	// userId from ctx get
 	userId := ctx.MustGet(constant.IDOfContextKey).(int64)
 	username := ctx.MustGet(constant.UsernameOfContextKey).(string)
