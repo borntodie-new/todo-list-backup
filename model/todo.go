@@ -16,7 +16,7 @@ type Todo struct {
 	Completed bool           `json:"completed" gorm:"column:completed;default:false"`
 	CreatedAt time.Time      `json:"created_at" gorm:"column:created_at"`
 	UpdatedAt time.Time      `json:"updated_at" gorm:"column:updated_at"`
-	DeletedAt gorm.DeletedAt `json:"deleted_at" gorm:"column:deleted_at;index"`
+	DeletedAt gorm.DeletedAt `json:"-" gorm:"column:deleted_at;index"`
 }
 
 func (*Todo) TableName() string {
