@@ -89,17 +89,18 @@ func (f *MGetUserFlow) prepareData() error {
 	var err error
 	// 查询用户记录
 	go func() {
+		defer wg.Done()
 		users := make([]*model.User, 0)
 		users, err = model.NewUserDao(f.ctx, f.db).RetrieveInstances(f.UserIds)
 		for _, user := range users {
 			f.usersMap[user.ID] = user
 		}
-		wg.Done()
 	}()
 	// 查询todo记录
 	go func() {
+		defer wg.Done()
 		todos := make([]*model.Todo, 0)
-		todos, err = model.NewTodoDao(f.ctx, f.db).RetrieveInstances(f.UserIds, constant.DefaultOffset, constant.DefaultLimit)
+		todos, err = model.NewTodoDao(f.ctx, f.db).RetrieveInstances(f.UserIds)
 		for _, todo := range todos {
 			if _, ok := f.todosMap[todo.UserId]; ok {
 				f.todosMap[todo.UserId] = append(f.todosMap[todo.UserId], todo)
@@ -108,7 +109,7 @@ func (f *MGetUserFlow) prepareData() error {
 				f.todosMap[todo.UserId] = append(f.todosMap[todo.UserId], todo)
 			}
 		}
-		wg.Done()
+
 	}()
 	wg.Wait()
 	return err
@@ -127,7 +128,9 @@ func (f *MGetUserFlow) packageData() error {
 			},
 			Todos: make([]*model.Todo, 0),
 		}
-		temp.Todos = f.todosMap[user.ID]
+		if todos, ok := f.todosMap[user.ID]; ok {
+			temp.Todos = todos
+		}
 		f.UserAndTodo = append(f.UserAndTodo, temp)
 	}
 	return nil
